@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 
 public class MealsUtil {
     public static void main(String[] args) {
-        List<Meal> meals = MealList.getMealList();
-
+        List<Meal> meals = MealList.mealList;
         List<MealTo> mealsTo = filteredByStreams(meals, LocalTime.of(7, 0),
-                LocalTime.of(12, 0), MealList.getCALORIES_PER_DAY());
-        mealsTo.forEach(System.out::println);    }
+                LocalTime.of(12, 0), MealList.CALORIES_PER_DAY);
+        mealsTo.forEach(System.out::println);
+    }
 
     public static List<MealTo> filteredByStreams(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
