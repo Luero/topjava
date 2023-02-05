@@ -14,8 +14,7 @@
     There are no meals to display
 </c:if>
 <c:if test="${not empty ListOfMeals}">
-<table border="2" cellpadding="7">
-    <caption>List of Meals</caption>
+<table bordercolor="black" border="1" cellpadding="7">
     <thead>
     <tr align="center">
         <th>Date</th>
@@ -27,8 +26,13 @@
     </thead>
     <%--@elvariable id="ListOfMeals" type="java.util.List"--%>
     <c:forEach items="${ListOfMeals}" var="meal">
-        <tr style="color: ${meal.excess ? "red" : "green"}">
-            <td><c:out value="${Formatter.parse(meal.dateTime)}" /></td>
+        <c:if test="${meal.excess == true}">
+            <tr style="color: red">
+        </c:if>
+        <c:if test="${meal.excess == false}">
+            <tr style="color: green">
+        </c:if>
+            <td><c:out value="${meal.dateTime.format(Formatter)}" /></td>
             <td><c:out value="${meal.description}" /></td>
             <td><c:out value="${meal.calories}" /></td>
         </tr>
