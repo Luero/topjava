@@ -8,7 +8,7 @@
 <body>
 <h3><a href="index.html">Home</a></h3>
 <hr>
-<h3><a href="meals?action=insert">Add Meal</a></h3>
+<h3><a href="meals?action=create">Add Meal</a></h3>
 <hr>
 <h2>Meals</h2>
 <c:if test="${empty listOfMeals}">
@@ -30,7 +30,7 @@
             <td>${meal.dateTime.format(formatter)}</td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
-            <td><a href="meals?action=edit&mealId=${meal.id}">Update</a></td>
+            <td><a href="meals?action=update&mealId=${meal.id}">Update</a></td>
             <td><a href="meals?action=delete&mealId=${meal.id}">Delete</a></td>
         </tr>
     </c:forEach>    

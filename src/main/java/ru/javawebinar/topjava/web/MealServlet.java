@@ -26,7 +26,7 @@ public class MealServlet extends HttpServlet {
         action = (action == null) ? "" : action;
 
         switch (action) {
-            case "edit": {
+            case "update": {
                 Meal meal = StorageInMemory.testData.get(Integer.parseInt(request.getParameter("mealId")));
                 request.setAttribute("meal", meal);
                 request.setAttribute("formatter", FORMATTER);
@@ -40,7 +40,7 @@ public class MealServlet extends HttpServlet {
                 log.debug("redirect to meals");
                 break;
             }
-            case "insert": {
+            case "create": {
                 request.setAttribute("formatter", FORMATTER);
                 request.getRequestDispatcher("addAndCreateMeal.jsp").forward(request, response);
                 log.debug("redirect to add and create page");
