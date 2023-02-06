@@ -8,12 +8,13 @@
 <body>
 <h3><a href="index.html">Home</a></h3>
 <hr>
+<h3><a href="meals?action=insert">Add Meal</a></h3>
+<hr>
 <h2>Meals</h2>
-<%--@elvariable id="ListOfMeals" type="java.util.List"--%>
-<c:if test="${empty ListOfMeals}">
+<c:if test="${empty listOfMeals}">
     There are no meals to display
 </c:if>
-<c:if test="${not empty ListOfMeals}">
+<c:if test="${not empty listOfMeals}">
 <table bordercolor="black" border="1" cellpadding="7">
     <thead>
     <tr align="center">
@@ -24,17 +25,13 @@
         <th></th>
     </tr>
     </thead>
-    <%--@elvariable id="ListOfMeals" type="java.util.List"--%>
-    <c:forEach items="${ListOfMeals}" var="meal">
-        <c:if test="${meal.excess == true}">
-            <tr style="color: red">
-        </c:if>
-        <c:if test="${meal.excess == false}">
-            <tr style="color: green">
-        </c:if>
-            <td><c:out value="${meal.dateTime.format(Formatter)}" /></td>
-            <td><c:out value="${meal.description}" /></td>
-            <td><c:out value="${meal.calories}" /></td>
+    <c:forEach items="${listOfMeals}" var="meal">
+        <tr style="color: ${meal.excess ? red : green}">
+            <td>${meal.dateTime.format(formatter)}</td>
+            <td>${meal.description}</td>
+            <td>${meal.calories}</td>
+            <td><a href="meals?action=edit&mealId=${meal.id}">Update</a></td>
+            <td><a href="meals?action=delete&mealId=${meal.id}">Delete</a></td>
         </tr>
     </c:forEach>    
 </table>
