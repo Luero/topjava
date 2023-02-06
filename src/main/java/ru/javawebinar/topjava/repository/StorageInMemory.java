@@ -23,7 +23,7 @@ public class StorageInMemory {
         testData.put(counter.incrementAndGet(), new Meal(setId(), LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410));
     }
 
-    private static Integer setId() {
+    public static Integer setId() {
         return counter.get();
     }
 
