@@ -11,7 +11,9 @@ import java.util.List;
 
 import ru.javawebinar.topjava.model.MealTo;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.repository.StorageInMemory;
+import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.repository.MealDao;
+import ru.javawebinar.topjava.repository.MealDaoImpl;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -19,6 +21,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class MealServlet extends HttpServlet {
     private static final Logger log = getLogger(UserServlet.class);
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private MealDao dao = new MealDaoImpl();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -27,26 +30,24 @@ public class MealServlet extends HttpServlet {
 
         switch (action) {
             case "update": {
-                Meal meal = StorageInMemory.testData.get(Integer.parseInt(request.getParameter("mealId")));
+                Meal meal = dao.get(Integer.parseInt(request.getParameter("mealId")));
                 request.setAttribute("meal", meal);
-                request.setAttribute("formatter", FORMATTER);
                 request.getRequestDispatcher("addAndCreateMeal.jsp").forward(request, response);
                 log.debug("redirect to add and create page");
                 break;
             }
             case "delete": {
-                StorageInMemory.testData.remove(Integer.parseInt(request.getParameter("mealId")));
+                dao.delete(Integer.parseInt(request.getParameter("mealId")));
                 response.sendRedirect("meals");
                 log.debug("redirect to meals");
                 break;
             }
             case "create": {
-                request.setAttribute("formatter", FORMATTER);
                 request.getRequestDispatcher("addAndCreateMeal.jsp").forward(request, response);
                 log.debug("redirect to add and create page");
             }
             default: {
-                List<MealTo> mealToList = MealsUtil.filteredByStreams(StorageInMemory.transferMapToList(), LocalTime.MIN, LocalTime.MAX, StorageInMemory.CALORIES_PER_DAY);
+                List<MealTo> mealToList = MealsUtil.filteredByStreams(dao.getAll(), LocalTime.MIN, LocalTime.MAX, User.CALORIES_PER_DAY);
                 request.setAttribute("listOfMeals", mealToList);
                 request.setAttribute("formatter", FORMATTER);
                 request.getRequestDispatcher("meals.jsp").forward(request, response);
@@ -72,12 +73,12 @@ public class MealServlet extends HttpServlet {
 
         if(id == 0)
         {
-            meal = new Meal(StorageInMemory.setId(), dateTime, description, calories);
-            StorageInMemory.testData.put(meal.getId(), meal);
+            meal = new Meal(id, dateTime, description, calories);
+            dao.create(meal);
         } else
         {
             meal = new Meal(id, dateTime, description, calories);
-            StorageInMemory.testData.put(id, meal);
+            dao.update(meal);
         }
 
         response.sendRedirect("meals");
