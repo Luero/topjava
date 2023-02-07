@@ -29,6 +29,10 @@ public class MealDaoImpl implements MealDao {
         return counter.get();
     }
 
+    private Integer incrementId() {
+        return counter.incrementAndGet();
+    }
+
     @Override
     public List<Meal> getAll() {
         return new ArrayList<>(inMemoryCollection.values());
@@ -55,7 +59,7 @@ public class MealDaoImpl implements MealDao {
 
     @Override
     public void create(Meal meal) {
-        Integer id = getId();
+        Integer id = incrementId();
         meal.setId(id);
         inMemoryCollection.put(meal.getId(), meal);
     }

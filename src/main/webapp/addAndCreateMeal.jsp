@@ -18,7 +18,7 @@
     <h2>Edit meal</h2>
 </c:if>
 <form method="POST" action='meals'>
-    <input type="hidden" readonly="readonly" name="mealId"
+    <input type = "hidden" readonly="readonly" name="mealId"
            value="${meal.id}"/> <br/>
     DateTime : <input
         type="datetime-local" name="dateTime"

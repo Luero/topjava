@@ -48,6 +48,7 @@ public class MealServlet extends HttpServlet {
                 request.setAttribute("title", "create");
                 request.getRequestDispatcher("addAndCreateMeal.jsp").forward(request, response);
                 log.debug("redirect to add and create page");
+                break;
             }
             default: {
                 List<MealTo> mealToList = MealsUtil.filteredByStreams(dao.getAll(), LocalTime.MIN, LocalTime.MAX, User.CALORIES_PER_DAY);
