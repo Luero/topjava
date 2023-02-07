@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
+
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.IOException;
@@ -32,6 +33,7 @@ public class MealServlet extends HttpServlet {
             case "update": {
                 Meal meal = dao.get(Integer.parseInt(request.getParameter("mealId")));
                 request.setAttribute("meal", meal);
+                request.setAttribute("title", "update");
                 request.getRequestDispatcher("addAndCreateMeal.jsp").forward(request, response);
                 log.debug("redirect to add and create page");
                 break;
@@ -43,6 +45,7 @@ public class MealServlet extends HttpServlet {
                 break;
             }
             case "create": {
+                request.setAttribute("title", "create");
                 request.getRequestDispatcher("addAndCreateMeal.jsp").forward(request, response);
                 log.debug("redirect to add and create page");
             }
@@ -60,23 +63,17 @@ public class MealServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         Meal meal;
-        Integer id;
-        try {
-            id = Integer.parseInt(request.getParameter("mealId"));
-        } catch (NumberFormatException e)
-        {
-            id = 0;
-        }
+        Integer id = null;
         LocalDateTime dateTime = LocalDateTime.parse(request.getParameter("dateTime"));
         String description = request.getParameter("description");
         int calories = Integer.parseInt(request.getParameter("calories"));
 
-        if(id == 0)
-        {
+        if (request.getParameter("mealId").equals("")) {
             meal = new Meal(id, dateTime, description, calories);
             dao.create(meal);
-        } else
-        {
+            log.debug(dao.print());
+        } else {
+            id = Integer.parseInt(request.getParameter("mealId"));
             meal = new Meal(id, dateTime, description, calories);
             dao.update(meal);
         }

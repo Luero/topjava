@@ -15,4 +15,6 @@ public interface MealDao {
     public void update(Meal meal);
 
     public void create(Meal meal);
+
+    public String print();
 }

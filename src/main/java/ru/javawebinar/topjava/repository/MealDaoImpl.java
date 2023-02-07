@@ -5,6 +5,7 @@ import ru.javawebinar.topjava.model.Meal;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -57,5 +58,16 @@ public class MealDaoImpl implements MealDao {
         Integer id = getId();
         meal.setId(id);
         inMemoryCollection.put(meal.getId(), meal);
+    }
+
+    public String print()
+    {
+        List<Meal> list = getAll();
+        StringBuilder builder = new StringBuilder();
+        for(Meal meal : list)
+        {
+            builder.append(meal.toString());
+        }
+        return builder.toString();
     }
 }
