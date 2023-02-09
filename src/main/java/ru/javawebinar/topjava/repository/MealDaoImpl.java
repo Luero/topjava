@@ -5,7 +5,6 @@ import ru.javawebinar.topjava.model.Meal;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,13 +15,13 @@ public class MealDaoImpl implements MealDao {
     private final Map<Integer, Meal> inMemoryCollection = new ConcurrentHashMap<>();
 
     {
-    inMemoryCollection.put(counter.incrementAndGet(), new Meal(getId(), LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500));
-    inMemoryCollection.put(counter.incrementAndGet(), new Meal(getId(), LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000));
-    inMemoryCollection.put(counter.incrementAndGet(), new Meal(getId(), LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500));
-    inMemoryCollection.put(counter.incrementAndGet(), new Meal(getId(), LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500));
-    inMemoryCollection.put(counter.incrementAndGet(), new Meal(getId(), LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак", 1000));
-    inMemoryCollection.put(counter.incrementAndGet(), new Meal(getId(), LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500));
-    inMemoryCollection.put(counter.incrementAndGet(), new Meal(getId(), LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410));
+        inMemoryCollection.put(counter.incrementAndGet(), new Meal(getId(), LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500));
+        inMemoryCollection.put(counter.incrementAndGet(), new Meal(getId(), LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000));
+        inMemoryCollection.put(counter.incrementAndGet(), new Meal(getId(), LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500));
+        inMemoryCollection.put(counter.incrementAndGet(), new Meal(getId(), LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500));
+        inMemoryCollection.put(counter.incrementAndGet(), new Meal(getId(), LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак", 1000));
+        inMemoryCollection.put(counter.incrementAndGet(), new Meal(getId(), LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500));
+        inMemoryCollection.put(counter.incrementAndGet(), new Meal(getId(), LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410));
     }
 
     private Integer getId() {
@@ -39,12 +38,12 @@ public class MealDaoImpl implements MealDao {
     }
 
     @Override
-    public Meal get(Integer id) {
+    public Meal get(int id) {
         return inMemoryCollection.get(id);
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(int id) {
         inMemoryCollection.remove(id);
     }
 
@@ -62,16 +61,5 @@ public class MealDaoImpl implements MealDao {
         Integer id = incrementId();
         meal.setId(id);
         inMemoryCollection.put(meal.getId(), meal);
-    }
-
-    public String print()
-    {
-        List<Meal> list = getAll();
-        StringBuilder builder = new StringBuilder();
-        for(Meal meal : list)
-        {
-            builder.append(meal.toString());
-        }
-        return builder.toString();
     }
 }

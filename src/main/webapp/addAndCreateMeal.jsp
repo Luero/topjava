@@ -11,23 +11,16 @@
 <body>
 <h3><a href="index.html">Home</a></h3>
 <hr>
-<c:if test="${title eq 'create'}">
-    <h2>Add meal</h2>
-</c:if>
-<c:if test="${title eq 'update'}">
-    <h2>Edit meal</h2>
-</c:if>
+<h2>${meal.id eq null ? "Add meal" : "Edit meal"}</h2>
 <form method="POST" action='meals'>
     <input type = "hidden" readonly="readonly" name="mealId"
            value="${meal.id}"/> <br/>
     DateTime : <input
         type="datetime-local" name="dateTime"
-        <c:if test="${title eq 'create'}">
+        <c:if test="${meal.id eq null}">
             value="<fmt:formatDate type="time" value="${now}" pattern="yyyy-MM-dd HH:mm"/>"
         </c:if>
-        <c:if test="${title eq 'update'}">
-            value="${meal.dateTime}"
-        </c:if> /> <br/>
+            value="${meal.dateTime}" /> <br/>
     Description : <input
         type="text" name="description"
         value="${meal.description}"/> <br/>

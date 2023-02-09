@@ -12,7 +12,6 @@ import java.util.List;
 
 import ru.javawebinar.topjava.model.MealTo;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealDao;
 import ru.javawebinar.topjava.repository.MealDaoImpl;
 import ru.javawebinar.topjava.util.MealsUtil;
@@ -20,9 +19,10 @@ import ru.javawebinar.topjava.util.MealsUtil;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
-    private static final Logger log = getLogger(UserServlet.class);
+    private static final Logger log = getLogger(MealServlet.class);
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private MealDao dao = new MealDaoImpl();
+    public static final int CALORIES_PER_DAY = 2000;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -33,7 +33,6 @@ public class MealServlet extends HttpServlet {
             case "update": {
                 Meal meal = dao.get(Integer.parseInt(request.getParameter("mealId")));
                 request.setAttribute("meal", meal);
-                request.setAttribute("title", "update");
                 request.getRequestDispatcher("addAndCreateMeal.jsp").forward(request, response);
                 log.debug("redirect to add and create page");
                 break;
@@ -45,13 +44,12 @@ public class MealServlet extends HttpServlet {
                 break;
             }
             case "create": {
-                request.setAttribute("title", "create");
                 request.getRequestDispatcher("addAndCreateMeal.jsp").forward(request, response);
                 log.debug("redirect to add and create page");
                 break;
             }
             default: {
-                List<MealTo> mealToList = MealsUtil.filteredByStreams(dao.getAll(), LocalTime.MIN, LocalTime.MAX, User.CALORIES_PER_DAY);
+                List<MealTo> mealToList = MealsUtil.filteredByStreams(dao.getAll(), LocalTime.MIN, LocalTime.MAX, CALORIES_PER_DAY);
                 request.setAttribute("listOfMeals", mealToList);
                 request.setAttribute("formatter", FORMATTER);
                 request.getRequestDispatcher("meals.jsp").forward(request, response);
@@ -72,7 +70,6 @@ public class MealServlet extends HttpServlet {
         if (request.getParameter("mealId").equals("")) {
             meal = new Meal(id, dateTime, description, calories);
             dao.create(meal);
-            log.debug(dao.print());
         } else {
             id = Integer.parseInt(request.getParameter("mealId"));
             meal = new Meal(id, dateTime, description, calories);
