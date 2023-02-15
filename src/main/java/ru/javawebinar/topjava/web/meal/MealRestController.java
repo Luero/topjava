@@ -27,21 +27,25 @@ public class MealRestController {
     private int authorisedUserId = SecurityUtil.authUserId();
 
     public List<MealTo> getAll() {
+        log.info("getAll");
         return MealsUtil.getTos(service.getAll(authorisedUserId), MealsUtil.DEFAULT_CALORIES_PER_DAY);
     }
 
     public List<MealTo> filteredByDateTime(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
+        log.info("filtered {}", startDate, endDate);
         return MealsUtil.getFilteredTos(service.getFilteredByDate(startDate, endDate, authorisedUserId),
                 MealsUtil.DEFAULT_CALORIES_PER_DAY, startTime, endTime);
     }
 
     public void delete(int id) {
+        log.info("delete {}", id);
         service.delete(id, authorisedUserId);
     }
 
     public MealTo get(int id) {
         Collection<Meal> collection = new ArrayList<>();
         collection.add(service.get(id, authorisedUserId));
+        log.info("get {}", id);
         return MealsUtil.getTos(collection, MealsUtil.DEFAULT_CALORIES_PER_DAY)
                 .stream()
                 .findAny()
@@ -51,6 +55,7 @@ public class MealRestController {
     public MealTo save(Meal meal) {
         Collection<Meal> collection = new ArrayList<>();
         collection.add(service.create(meal, authorisedUserId));
+        log.info("create {}", meal);
         return MealsUtil.getTos(collection, MealsUtil.DEFAULT_CALORIES_PER_DAY)
                 .stream()
                 .findAny()
@@ -59,6 +64,7 @@ public class MealRestController {
 
     public void update(Meal meal, int id) {
         if(get(id) != null) {
+            log.info("update {}", meal);
             service.update(meal, authorisedUserId);
         }
     }
