@@ -42,14 +42,9 @@ public class MealRestController {
         service.delete(id, authorisedUserId);
     }
 
-    public MealTo get(int id) {
-        Collection<Meal> collection = new ArrayList<>();
-        collection.add(service.get(id, authorisedUserId));
+    public Meal get(int id) {
         log.info("get {}", id);
-        return MealsUtil.getTos(collection, MealsUtil.DEFAULT_CALORIES_PER_DAY)
-                .stream()
-                .findAny()
-                .get();
+        return service.get(id, authorisedUserId);
     }
 
     public MealTo save(Meal meal) {
