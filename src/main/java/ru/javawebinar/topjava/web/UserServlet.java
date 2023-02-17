@@ -22,7 +22,7 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.info("forward to meals");
-        SecurityUtil.setAuthUserId(request.getParameter("userId").isEmpty() ? SecurityUtil.authUserId() : Integer.parseInt(request.getParameter("userId")));
+        SecurityUtil.setAuthUserId(request.getParameter("userId") == null ? SecurityUtil.authUserId() : Integer.parseInt(request.getParameter("userId")));
         response.sendRedirect("meals");
     }
 }
