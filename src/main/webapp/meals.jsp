@@ -24,6 +24,7 @@
     <a href="meals?action=create">Add Meal</a>
     <br>
     <form method="get">
+        <input type="hidden" name="action" value="filter"/>
         <dl>
             <dt>From date:</dt>
             <dd><label>
@@ -48,8 +49,8 @@
                 <input type="time" name="toTime">
             </label></dd>
         </dl>
+        <button type="submit">Get Filtered</button>
     </form>
-    <a href="meals?action=filter">Filter</a>
     <br>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>

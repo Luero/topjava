@@ -76,7 +76,8 @@ public class InMemoryMealRepository implements MealRepository {
     }
 
     public List<Meal> filteredByDate(LocalDate startDate, LocalDate endDate, int userId) {
-        return (List<Meal>) filteredByPredicate(meal -> DateTimeUtil.isBetweenClosed(meal.getDate(), startDate, endDate));
+        return (List<Meal>) filteredByPredicate(meal -> DateTimeUtil.isBetweenClosed(meal.getDate(), startDate, endDate) &&
+                meal.getUserId() == userId);
     }
 
     private Collection<Meal> filteredByPredicate(Predicate<Meal> filter) {
