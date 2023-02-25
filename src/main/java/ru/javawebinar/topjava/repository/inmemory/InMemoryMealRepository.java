@@ -7,10 +7,7 @@ import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
@@ -36,15 +33,15 @@ public class InMemoryMealRepository implements MealRepository {
             return meal;
         }
 
-        if (!repository.containsKey(meal.getId())) {
+        Meal mealToBeUpdated = repository.get(meal.getId());
+        if (mealToBeUpdated == null) {
             return null;
         }
 
-        if (repository.get(meal.getId()).getUserId() != userId) {
+        if (mealToBeUpdated.getUserId() != userId) {
             return null;
         }
 
-        // handle case: update, but not present in storage
         return repository.computeIfPresent(meal.getId(), (id, exMeal) -> {
             meal.setUserId(userId);
             return meal;
@@ -53,36 +50,37 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-        if(!repository.containsKey(id)) {
+        Meal meal = repository.get(id);
+        if(meal == null) {
             return false;
         } else {
-            return repository.get(id).getUserId() == userId && repository.remove(id) != null;
+            return meal.getUserId() == userId && repository.remove(id) != null;
         }
     }
 
     @Override
     public Meal get(int id, int userId) {
-        if(!repository.containsKey(id)) {
+        Meal meal = repository.get(id);
+        if(meal == null) {
             return null;
         } else {
-            Meal meal = repository.get(id);
             return meal.getUserId() == userId ? meal : null;
         }
     }
 
     @Override
-    public Collection<Meal> getAll(int userId) {
-        return filteredByPredicate(meal -> meal.getUserId() == userId);
+    public List<Meal> getAll(int userId) {
+        return filteredByPredicate(Objects::nonNull, userId);
     }
 
     public List<Meal> filteredByDate(LocalDate startDate, LocalDate endDate, int userId) {
-        return (List<Meal>) filteredByPredicate(meal -> DateTimeUtil.isBetweenClosed(meal.getDate(), startDate, endDate) &&
-                meal.getUserId() == userId);
+        return filteredByPredicate(meal -> DateTimeUtil.isBetweenClosed(meal.getDate(), startDate, endDate), userId);
     }
 
-    private Collection<Meal> filteredByPredicate(Predicate<Meal> filter) {
+    private List<Meal> filteredByPredicate(Predicate<Meal> filter, int userId) {
         return repository.values()
                 .stream()
+                .filter(meal -> meal.getUserId() == userId)
                 .filter(filter)
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());

@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.format.datetime.DateFormatter;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
@@ -16,7 +15,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
@@ -38,14 +36,11 @@ public class MealServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         String id = request.getParameter("id");
-
         Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")), null);
-
         log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
-
         if (meal.isNew()) {
             controller.create(meal);
         } else {
@@ -76,15 +71,10 @@ public class MealServlet extends HttpServlet {
                 break;
             case "filter":
                 log.info("filteredByDateTime");
-                String fromDate = request.getParameter("fromDate");
-                LocalDate startDate = fromDate.isEmpty() ? null : LocalDate.parse(fromDate);
-                String toDate = request.getParameter("toDate");
-                LocalDate endDate = toDate.isEmpty() ? null : LocalDate.parse(toDate);
-                String fromTime = request.getParameter("fromTime");
-                LocalTime startTime = fromTime.isEmpty() ? null : LocalTime.parse(fromTime);
-                String toTime = request.getParameter("toTime");
-                LocalTime endTime = toTime.isEmpty() ? null : LocalTime.parse(toTime);
-                request.setAttribute("meals", controller.filteredByDateTime(startDate, endDate, startTime, endTime));
+                request.setAttribute("meals",
+                        controller.filteredByDateTime(parseLocalDate(request.getParameter("fromDate")),
+                        parseLocalDate(request.getParameter("toDate")), parseLocalTime(request.getParameter("fromTime")),
+                        parseLocalTime(request.getParameter("toTime"))));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
             case "all":
@@ -104,5 +94,13 @@ public class MealServlet extends HttpServlet {
     private int getId(HttpServletRequest request) {
         String paramId = Objects.requireNonNull(request.getParameter("id"));
         return Integer.parseInt(paramId);
+    }
+
+    private LocalDate parseLocalDate(String dateToParse) {
+        return dateToParse.isEmpty() ? null : LocalDate.parse(dateToParse);
+    }
+
+    private LocalTime parseLocalTime(String timeToParse) {
+        return timeToParse.isEmpty() ? null : LocalTime.parse(timeToParse);
     }
 }

@@ -28,25 +28,25 @@
         <dl>
             <dt>From date:</dt>
             <dd><label>
-                <input type="date" name="fromDate">
+                <input type="date" name="fromDate" value="${param.fromDate}">
             </label></dd>
         </dl>
         <dl>
             <dt>To date:</dt>
             <dd><label>
-                <input type="date" name="toDate">
+                <input type="date" name="toDate" value="${param.toDate}">
             </label></dd>
         </dl>
         <dl>
             <dt>From time:</dt>
             <dd><label>
-                <input type="time" name="fromTime">
+                <input type="time" name="fromTime" value="${param.fromTime}">
             </label></dd>
         </dl>
         <dl>
             <dt>To time:</dt>
             <dd><label>
-                <input type="time" name="toTime">
+                <input type="time" name="toTime" value="${param.toTime}">
             </label></dd>
         </dl>
         <button type="submit">Get Filtered</button>
