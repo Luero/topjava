@@ -5,6 +5,7 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -20,7 +21,7 @@ public class InMemoryMealRepository implements MealRepository {
 
     {
         for (Meal meal : MealsUtil.meals) {
-            save(meal, meal.getUserId());
+            save(meal, SecurityUtil.authUserId());
         }
     }
 
@@ -28,62 +29,59 @@ public class InMemoryMealRepository implements MealRepository {
     public Meal save(Meal meal, int userId) {
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
-            meal.setUserId(userId);
-            repository.computeIfAbsent(userId, meals -> new HashMap<>()).put(meal.getId(), meal);
+            Map<Integer, Meal> usersMeals = new HashMap<>();
+            repository.computeIfAbsent(userId, meals -> usersMeals).put(meal.getId(), meal);
             return meal;
         }
 
-        Meal mealToBeUpdated = repository.get(userId).get(meal.getId());
-        if (mealToBeUpdated == null) {
+        Map<Integer, Meal> usersMeals = repository.get(userId);
+        Meal mealToBeUpdated = usersMeals == null ? null : usersMeals.get(meal.getId());
+
+        if (mealToBeUpdated == null || SecurityUtil.authUserId() != userId) {
             return null;
         }
 
-        if (mealToBeUpdated.getUserId() != userId) {
-            return null;
-        }
-
-        return repository.get(userId).computeIfPresent(meal.getId(), (id, exMeal) -> {
-            meal.setUserId(userId);
-            return meal;
-        });
+        usersMeals.computeIfPresent(meal.getId(), (id, exMeal) -> meal);
+        repository.put(userId, usersMeals);
+        return meal;
     }
 
     @Override
     public boolean delete(int id, int userId) {
-        Meal meal = repository.get(userId).get(id);
-        if(meal == null) {
-            return false;
-        } else {
-            return meal.getUserId() == userId && repository.remove(id) != null;
-        }
+        Map<Integer, Meal> usersMeals = repository.get(userId);
+        Meal meal = usersMeals == null ? null : usersMeals.get(id);
+        return meal != null && userId == SecurityUtil.authUserId() && repository.get(userId).remove(id) != null;
     }
 
     @Override
     public Meal get(int id, int userId) {
-        Meal meal = repository.get(userId).get(id);
-        if(meal == null) {
-            return null;
-        } else {
-            return meal.getUserId() == userId ? meal : null;
-        }
+        Map<Integer, Meal> usersMeals = repository.get(userId);
+        Meal meal = usersMeals == null ? null : usersMeals.get(id);
+        return meal == null || userId != SecurityUtil.authUserId() ? null : meal;
     }
 
     @Override
     public List<Meal> getAll(int userId) {
-        return filteredByPredicate(Objects::nonNull, userId);
+        return filteredByPredicate(meal -> true, userId);
     }
 
+    @Override
     public List<Meal> filteredByDate(LocalDate startDate, LocalDate endDate, int userId) {
         return filteredByPredicate(meal -> DateTimeUtil.isBetweenClosed(meal.getDate(), startDate, endDate), userId);
     }
 
     private List<Meal> filteredByPredicate(Predicate<Meal> filter, int userId) {
-        return repository.get(userId)
-                .values()
-                .stream()
-                .filter(filter)
-                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
-                .collect(Collectors.toList());
+        Map<Integer, Meal> usersMeals = repository.get(userId);
+        if (usersMeals != null) {
+            return usersMeals
+                    .values()
+                    .stream()
+                    .filter(filter)
+                    .sorted(Comparator.comparing(Meal::getDateTime).reversed())
+                    .collect(Collectors.toList());
+        } else {
+            return new ArrayList<>();
+        }
     }
 }
 
