@@ -42,7 +42,6 @@ public class InMemoryMealRepository implements MealRepository {
         }
 
         usersMeals.computeIfPresent(meal.getId(), (id, exMeal) -> meal);
-        repository.put(userId, usersMeals);
         return meal;
     }
 
@@ -50,7 +49,7 @@ public class InMemoryMealRepository implements MealRepository {
     public boolean delete(int id, int userId) {
         Map<Integer, Meal> usersMeals = repository.get(userId);
         Meal meal = usersMeals == null ? null : usersMeals.get(id);
-        return meal != null && userId == SecurityUtil.authUserId() && repository.get(userId).remove(id) != null;
+        return meal != null && userId == SecurityUtil.authUserId() && usersMeals.remove(id) != null;
     }
 
     @Override
