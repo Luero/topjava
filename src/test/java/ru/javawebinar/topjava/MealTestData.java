@@ -17,7 +17,7 @@ public class MealTestData {
             "coffee", 30);
     public static final Meal userMeal4 = new Meal(START_SEQ+6, LocalDateTime.of(2023, Month.FEBRUARY, 16, 19, 40),
             "salad and fish", 320);
-    public static final Meal uderMeal5 = new Meal(START_SEQ+7, LocalDateTime.of(2023, Month.FEBRUARY, 20, 9, 30),
+    public static final Meal userMeal5 = new Meal(START_SEQ+7, LocalDateTime.of(2023, Month.FEBRUARY, 20, 9, 30),
             "English breakfast", 450);
     public static final Meal userMeal6 = new Meal(START_SEQ+8, LocalDateTime.of(2023, Month.FEBRUARY, 20, 13, 0),
             "soup with vegetables", 250);
@@ -39,6 +39,14 @@ public class MealTestData {
 
     public static Meal getNew() {
         return new Meal(null, LocalDateTime.of(2023, Month.FEBRUARY, 21, 10, 0, 0), "New meal", 1000);
+    }
+
+    public static Meal getUpdated() {
+        Meal updated = new Meal(adminMeal5.getId(), adminMeal5.getDateTime(), adminMeal5.getDescription(), adminMeal5.getCalories());
+        updated.setDescription("Updated meal description");
+        updated.setCalories(500);
+        updated.setDateTime(LocalDateTime.of(2023, Month.MARCH, 22, 0, 0));
+        return updated;
     }
 
     public static void assertMatch(Meal actual, Meal expected) {

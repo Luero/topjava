@@ -17,8 +17,6 @@ import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 
@@ -86,19 +84,14 @@ public class MealServiceTest {
     @Test
     public void getAll() {
         List<Meal> mealList = service.getAll(UserTestData.USER_ID);
-        assertMatch(mealList, Arrays.asList(userMeal7, userMeal6, uderMeal5, userMeal4, userMeal3, userMeal2, userMeal1));
+        assertMatch(mealList, Arrays.asList(userMeal7, userMeal6, userMeal5, userMeal4, userMeal3, userMeal2, userMeal1));
     }
 
     @Test
     public void update() {
-        Meal updated = new Meal(adminMeal5.getId(), adminMeal5.getDateTime(), adminMeal5.getDescription(), adminMeal5.getCalories());
-        updated.setDescription("Updated meal description");
-        updated.setCalories(500);
-        updated.setDateTime(LocalDateTime.of(2023, Month.MARCH, 22, 0, 0));
+        Meal updated = getUpdated();
         service.update(updated, UserTestData.ADMIN_ID);
-        Meal etalon = new Meal(adminMeal5.getId(), LocalDateTime.of(2023, Month.MARCH, 22, 0, 0),
-                "Updated meal description", 500);
-        assertMatch(service.get(adminMeal5.getId(), UserTestData.ADMIN_ID), etalon);
+        assertMatch(service.get(adminMeal5.getId(), UserTestData.ADMIN_ID), getUpdated());
     }
 
     @Test
