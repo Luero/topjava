@@ -1,7 +1,10 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.Ignore;
+import org.junit.AfterClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Stopwatch;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -9,13 +12,19 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
+import org.slf4j.Logger;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertThrows;
+import static org.slf4j.LoggerFactory.getLogger;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
@@ -26,7 +35,19 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+@Transactional
 public class MealServiceTest {
+
+    private static final Logger logger = getLogger(MealServiceTest.class);
+    private static final List<String> messages = new ArrayList<>();
+
+    @Rule
+    public final Stopwatch stopwatch = new Stopwatch() {
+        protected void finished(long nanos, Description description) {
+            messages.add(String.format("%s - time taken %d ms \n", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos)));
+            logger.info("{} finished, time taken {} ms", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos));
+        }
+    };
 
     @Autowired
     private MealService service;
@@ -108,5 +129,12 @@ public class MealServiceTest {
     @Test
     public void getBetweenWithNullDates() {
         MEAL_MATCHER.assertMatch(service.getBetweenInclusive(null, null, USER_ID), meals);
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        for (String message : messages) {
+            System.out.println(message);
+        }
     }
 }
