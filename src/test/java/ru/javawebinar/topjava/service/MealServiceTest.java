@@ -35,7 +35,6 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-@Transactional
 public class MealServiceTest {
 
     private static final Logger logger = getLogger(MealServiceTest.class);
@@ -69,6 +68,7 @@ public class MealServiceTest {
     }
 
     @Test
+    @Transactional
     public void create() {
         Meal created = service.create(getNew(), USER_ID);
         int newId = created.id();
@@ -79,6 +79,7 @@ public class MealServiceTest {
     }
 
     @Test
+    @Transactional
     public void duplicateDateTimeCreate() {
         assertThrows(DataAccessException.class, () ->
                 service.create(new Meal(null, meal1.getDateTime(), "duplicate", 100), USER_ID));
@@ -101,6 +102,7 @@ public class MealServiceTest {
     }
 
     @Test
+    @Transactional
     public void update() {
         Meal updated = getUpdated();
         service.update(updated, USER_ID);
