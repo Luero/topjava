@@ -12,15 +12,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import org.slf4j.Logger;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertThrows;
@@ -38,15 +35,20 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 public class MealServiceTest {
 
     private static final Logger logger = getLogger(MealServiceTest.class);
-    private static final List<String> messages = new ArrayList<>();
+    private static final StringBuilder builder = new StringBuilder();
 
     @Rule
     public final Stopwatch stopwatch = new Stopwatch() {
         protected void finished(long nanos, Description description) {
-            messages.add(String.format("%s - time taken %d ms \n", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos)));
+            builder.append(String.format("%-30s %d ms \n", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos)));
             logger.info("{} finished, time taken {} ms", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos));
         }
     };
+
+    @AfterClass
+    public static void afterClass() {
+        System.out.println(builder);
+    }
 
     @Autowired
     private MealService service;
@@ -68,7 +70,6 @@ public class MealServiceTest {
     }
 
     @Test
-    @Transactional
     public void create() {
         Meal created = service.create(getNew(), USER_ID);
         int newId = created.id();
@@ -79,7 +80,6 @@ public class MealServiceTest {
     }
 
     @Test
-    @Transactional
     public void duplicateDateTimeCreate() {
         assertThrows(DataAccessException.class, () ->
                 service.create(new Meal(null, meal1.getDateTime(), "duplicate", 100), USER_ID));
@@ -102,7 +102,6 @@ public class MealServiceTest {
     }
 
     @Test
-    @Transactional
     public void update() {
         Meal updated = getUpdated();
         service.update(updated, USER_ID);
@@ -131,12 +130,5 @@ public class MealServiceTest {
     @Test
     public void getBetweenWithNullDates() {
         MEAL_MATCHER.assertMatch(service.getBetweenInclusive(null, null, USER_ID), meals);
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        for (String message : messages) {
-            System.out.println(message);
-        }
     }
 }
