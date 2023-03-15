@@ -40,14 +40,15 @@ public class MealServiceTest {
     @Rule
     public final Stopwatch stopwatch = new Stopwatch() {
         protected void finished(long nanos, Description description) {
-            builder.append(String.format("%-30s %d ms \n", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos)));
-            logger.info("{} finished, time taken {} ms", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos));
+            long nanosToMillis = TimeUnit.NANOSECONDS.toMillis(nanos);
+            builder.append(String.format("\n %-30s %d ms", description.getMethodName(), nanosToMillis));
+            logger.info("{} finished, time taken {} ms", description.getMethodName(), nanosToMillis);
         }
     };
 
     @AfterClass
     public static void afterClass() {
-        System.out.println(builder);
+        logger.info(builder.toString());
     }
 
     @Autowired
