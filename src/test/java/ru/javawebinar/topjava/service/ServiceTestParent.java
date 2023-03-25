@@ -22,7 +22,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-public class ServiceTestParent {
+public abstract class ServiceTestParent {
 
     private static final Logger log = getLogger("result");
 
