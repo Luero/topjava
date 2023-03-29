@@ -18,15 +18,15 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 public abstract class MealServiceTest extends ServiceTest {
 
     @Autowired
-    private MealService service;
+    protected MealService service;
 
-    @Override
+    @Test
     public void delete() {
         service.delete(MEAL1_ID, USER_ID);
         assertThrows(NotFoundException.class, () -> service.get(MEAL1_ID, USER_ID));
     }
 
-    @Override
+    @Test
     public void deleteNotFound() {
         assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND, USER_ID));
     }
@@ -36,7 +36,7 @@ public abstract class MealServiceTest extends ServiceTest {
         assertThrows(NotFoundException.class, () -> service.delete(MEAL1_ID, ADMIN_ID));
     }
 
-    @Override
+    @Test
     public void create() {
         Meal created = service.create(getNew(), USER_ID);
         int newId = created.id();
@@ -52,13 +52,13 @@ public abstract class MealServiceTest extends ServiceTest {
                 service.create(new Meal(null, meal1.getDateTime(), "duplicate", 100), USER_ID));
     }
 
-    @Override
+    @Test
     public void get() {
         Meal actual = service.get(ADMIN_MEAL_ID, ADMIN_ID);
         MEAL_MATCHER.assertMatch(actual, adminMeal1);
     }
 
-    @Override
+    @Test
     public void getNotFound() {
         assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND, USER_ID));
     }
@@ -68,7 +68,7 @@ public abstract class MealServiceTest extends ServiceTest {
         assertThrows(NotFoundException.class, () -> service.get(MEAL1_ID, ADMIN_ID));
     }
 
-    @Override
+    @Test
     public void update() {
         Meal updated = getUpdated();
         service.update(updated, USER_ID);
@@ -82,7 +82,7 @@ public abstract class MealServiceTest extends ServiceTest {
         MEAL_MATCHER.assertMatch(service.get(MEAL1_ID, USER_ID), meal1);
     }
 
-    @Override
+    @Test
     public void getAll() {
         MEAL_MATCHER.assertMatch(service.getAll(USER_ID), meals);
     }
