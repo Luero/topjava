@@ -26,17 +26,11 @@ public class DataJpaMealRepository implements MealRepository {
     @Transactional
     public Meal save(Meal meal, int userId) {
         User user = crudUserRepository.getReferenceById(userId);
-        if (meal.isNew()) {
-            meal.setUser(user);
-            return crudRepository.save(meal);
-        }
-
-        Meal mealToBeUpdated = get(meal.id(), userId);
-        if (mealToBeUpdated != null) {
-            meal.setUser(user);
-            return crudRepository.save(meal);
-        } else {
+        if (!meal.isNew() && get(meal.id(), userId) == null) {
             return null;
+        } else {
+            meal.setUser(user);
+            return crudRepository.save(meal);
         }
     }
 
@@ -61,7 +55,8 @@ public class DataJpaMealRepository implements MealRepository {
         return crudRepository.filteredByDateTime(userId, startDateTime, endDateTime);
     }
 
-    public Meal getMealByIdAndUserId(int id, int userId) {
-        return crudRepository.getMealByIdAndUserId(id, userId);
+    @Override
+    public Meal getWithUserByIdAndUserId(int id, int userId) {
+        return crudRepository.getWithUserByIdAndUserId(id, userId);
     }
 }

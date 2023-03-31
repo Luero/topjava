@@ -10,7 +10,6 @@ import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertThrows;
@@ -43,7 +42,7 @@ public abstract class UserServiceTest extends ServiceTest {
     public void duplicateMailCreate() {
         assertThrows(DataAccessException.class, () ->
                 service.create(new User(null, "Duplicate", "user@yandex.ru", "newPass",
-                        new ArrayList<>(), Role.USER)));
+                        Role.USER)));
     }
 
     @Test
