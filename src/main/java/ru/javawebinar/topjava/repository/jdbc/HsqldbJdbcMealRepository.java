@@ -20,7 +20,7 @@ public class HsqldbJdbcMealRepository extends JdbcMealRepository {
     }
 
     @Override
-    public <T> T changeDateTimeType(LocalDateTime dateTime) {
-        return (T) Timestamp.valueOf(dateTime);
+    public Timestamp changeDateTimeType(LocalDateTime dateTime) {
+        return Timestamp.valueOf(dateTime);
     }
 }

@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-@Transactional(readOnly = true)
 public class DataJpaMealRepository implements MealRepository {
 
     private final CrudMealRepository crudRepository;
@@ -25,17 +24,16 @@ public class DataJpaMealRepository implements MealRepository {
     @Override
     @Transactional
     public Meal save(Meal meal, int userId) {
-        User user = crudUserRepository.getReferenceById(userId);
         if (!meal.isNew() && get(meal.id(), userId) == null) {
             return null;
         } else {
+            User user = crudUserRepository.getReferenceById(userId);
             meal.setUser(user);
             return crudRepository.save(meal);
         }
     }
 
     @Override
-    @Transactional
     public boolean delete(int id, int userId) {
         return crudRepository.delete(id, userId) != 0;
     }
