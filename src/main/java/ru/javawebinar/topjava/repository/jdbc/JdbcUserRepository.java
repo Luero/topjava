@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
-
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -95,13 +94,7 @@ public class JdbcUserRepository implements UserRepository {
     }
 
     private void setRoles(User user) {
-        user.setRoles(jdbcTemplate.query("SELECT * FROM user_role WHERE user_id = ?", rs -> {
-            List<Role> roles = new ArrayList<>();
-            while (rs.next()) {
-                roles.add(Role.valueOf(rs.getString("role")));
-            }
-            return roles;
-        }, user.getId()));
+        user.setRoles(jdbcTemplate.queryForList("SELECT * FROM user_role WHERE user_id = ?", user.getId()));
     }
 
     private int[] setRoles(int userId, Set<Role> roles) {
