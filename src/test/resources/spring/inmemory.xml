@@ -5,4 +5,5 @@
 
     <context:component-scan base-package="ru.javawebinar.topjava.**.repository.inmemory"/>
     <context:component-scan base-package="ru.javawebinar.topjava.**.web.user"/>
+    <context:component-scan base-package="ru.javawebinar.topjava.**.web.meal"/>
 </beans>

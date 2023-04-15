@@ -94,7 +94,8 @@ public class JdbcUserRepository implements UserRepository {
     }
 
     private void setRoles(User user) {
-        user.setRoles(jdbcTemplate.queryForList("SELECT * FROM user_role WHERE user_id = ?", user.getId()));
+        Integer id = user.getId();
+        user.setRoles(jdbcTemplate.queryForList("SELECT role FROM user_role WHERE user_id = ?", Role.class, id));
     }
 
     private int[] setRoles(int userId, Set<Role> roles) {
@@ -103,7 +104,7 @@ public class JdbcUserRepository implements UserRepository {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 ps.setInt(1, userId);
-                ps.setString(2, rolesList.get(i).toString());
+                ps.setString(2, rolesList.get(i).name());
             }
 
             @Override
@@ -118,7 +119,7 @@ public class JdbcUserRepository implements UserRepository {
         return jdbcTemplate.batchUpdate("UPDATE user_role SET role=? WHERE user_id=?", new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1, rolesList.get(i).toString());
+                ps.setString(1, rolesList.get(i).name());
                 ps.setInt(2, userId);
             }
 

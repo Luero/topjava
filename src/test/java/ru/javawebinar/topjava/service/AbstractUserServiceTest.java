@@ -33,16 +33,12 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     @Autowired(required = false)
     protected JpaUtil jpaUtil;
 
-    @Autowired
-    private Environment environment;
-
     @Before
     public void setup() {
         cacheManager.getCache("users").clear();
-        if(isJdbc()) {
-            return;
+        if(!isJdbc()) {
+            jpaUtil.clear2ndLevelHibernateCache();
         }
-        jpaUtil.clear2ndLevelHibernateCache();
     }
 
     @Test
@@ -104,7 +100,7 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Test
     public void createWithException() throws Exception {
-        Assume.assumeTrue(!isJdbc());
+        Assume.assumeFalse(isJdbc());
 
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "  ", "mail@yandex.ru", "password", Role.USER)));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "  ", "password", Role.USER)));
@@ -113,7 +109,24 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "mail@yandex.ru", "password", 10001, true, new Date(), Set.of())));
     }
 
-    protected boolean isJdbc() {
-        return environment.acceptsProfiles(Profiles.of("jdbc"));
+    @Test
+    public void updateByAddingRole() {
+        User user = getUpdatedByAddingRole();
+        service.update(user);
+        USER_MATCHER.assertMatch(service.get(USER_ID), getUpdatedByAddingRole());
+    }
+
+    @Test
+    public void updateByDeletingRoles() {
+        User user = getUpdatedByDeletingRoles();
+        service.update(user);
+        USER_MATCHER.assertMatch(service.get(USER_ID), getUpdatedByDeletingRoles());
+    }
+
+    @Test
+    public void updateBySettingRole() {
+        User user = getUpdatedBySettingRole();
+        service.update(user);
+        USER_MATCHER.assertMatch(service.get(GUEST_ID), getUpdatedBySettingRole());
     }
 }

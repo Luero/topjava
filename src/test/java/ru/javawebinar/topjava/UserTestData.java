@@ -38,4 +38,26 @@ public class UserTestData {
         updated.setRoles(Collections.singletonList(Role.ADMIN));
         return updated;
     }
+
+    public static User getUpdatedByAddingRole() {
+        User updated = new User(user);
+        updated.setEmail("user@gmail.com");
+        updated.setName("User");
+        updated.setPassword("password");
+        updated.setEnabled(false);
+        updated.setRoles(List.of(Role.USER, Role.ADMIN));
+        return updated;
+    }
+
+    public static User getUpdatedByDeletingRoles() {
+        User updated = new User(user);
+        updated.setRoles(Collections.EMPTY_LIST);
+        return updated;
+    }
+
+    public static User getUpdatedBySettingRole() {
+        User updated = new User(guest);
+        updated.setRoles(Collections.singletonList(Role.USER));
+        return updated;
+    }
 }
