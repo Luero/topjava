@@ -41,10 +41,6 @@ public class UserTestData {
 
     public static User getUpdatedByAddingRole() {
         User updated = new User(user);
-        updated.setEmail("user@gmail.com");
-        updated.setName("User");
-        updated.setPassword("password");
-        updated.setEnabled(false);
         updated.setRoles(List.of(Role.USER, Role.ADMIN));
         return updated;
     }
