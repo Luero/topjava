@@ -4,11 +4,12 @@ package ru.javawebinar.topjava.util;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.lang.NonNull;
 import ru.javawebinar.topjava.model.AbstractBaseEntity;
-import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import javax.validation.*;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import java.util.Set;
 
 public class ValidationUtil {
@@ -60,15 +61,8 @@ public class ValidationUtil {
         return rootCause != null ? rootCause : t;
     }
 
-    public static void validateUser(@NonNull User user) {
-        Set<ConstraintViolation<User>> violations = validator.validate(user);
-        if (!violations.isEmpty()) {
-            throw new ConstraintViolationException(violations);
-        }
-    }
-
-    public static void validateMeal(@NonNull Meal meal) {
-        Set<ConstraintViolation<Meal>> violations = validator.validate(meal);
+    public static <T> void validate(T entity) {
+        Set<ConstraintViolation<T>> violations = validator.validate(entity);
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
         }

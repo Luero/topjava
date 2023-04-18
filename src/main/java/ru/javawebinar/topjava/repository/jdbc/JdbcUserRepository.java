@@ -45,7 +45,7 @@ public class JdbcUserRepository implements UserRepository {
     @Override
     @Transactional
     public User save(User user) {
-        ValidationUtil.validateUser(user);
+        ValidationUtil.validate(user);
         BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
         if (user.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(parameterSource);
@@ -57,7 +57,8 @@ public class JdbcUserRepository implements UserRepository {
                 parameterSource) == 0) {
             return null;
         } else {
-            updateRoles(user.id(), user.getRoles());
+            deleteRoles(user.id());
+            setRoles(user.id(), user.getRoles());
         }
         return user;
     }
@@ -116,19 +117,7 @@ public class JdbcUserRepository implements UserRepository {
         });
     }
 
-    public int[] updateRoles(int userId, Set<Role> roles) {
-        List<Role> rolesList = new ArrayList<>(roles);
-        return jdbcTemplate.batchUpdate("UPDATE user_role SET role=? WHERE user_id=?", new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1, rolesList.get(i).name());
-                ps.setInt(2, userId);
-            }
-
-            @Override
-            public int getBatchSize() {
-                return rolesList.size();
-            }
-        });
+    public boolean deleteRoles(int userId) {
+        return jdbcTemplate.update("DELETE FROM user_role WHERE user_id=?", userId) != 0;
     }
 }
