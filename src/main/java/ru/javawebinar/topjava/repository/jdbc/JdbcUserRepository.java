@@ -117,7 +117,7 @@ public class JdbcUserRepository implements UserRepository {
         });
     }
 
-    public boolean deleteRoles(int userId) {
-        return jdbcTemplate.update("DELETE FROM user_role WHERE user_id=?", userId) != 0;
+    public void deleteRoles(int userId) {
+        jdbcTemplate.update("DELETE FROM user_role WHERE user_id=?", userId);
     }
 }
