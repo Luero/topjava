@@ -243,3 +243,31 @@ Java Enterprise Online Project
 -  <a href="http://www.bookvoed.ru/book?id=639284">Редмонд Э.: Семь баз данных за семь недель. Введение в современные базы данных и идеологию NoSQL</a>
 -  <a href="http://www.ozon.ru/context/detail/id/3174887/">Brian Goetz: Java Concurrency in Practice</a>
 -  <a href="http://bookvoed.ru/book?id=2593572">G.L. McDowell: Cracking the Coding Interview</a>
+ 
+##### HW7, p.4 - curl test of MealRestController
+    
+<!-- getAll method -->
+C:\Users\iamks>curl http://localhost:8080/topjava_war_exploded/rest/meals
+[{"id":100009,"dateTime":"2020-01-31T20:00:00","description":"Ужин","calories":510,"excess":true},{"id":100008,"dateTime":"2020-01-31T13:00:00","description":"Обед","calories":1000,"excess":true},{"id":100007,"dateTime":"2020-01-31T10:00:00","description":"Завтрак","calories":500,"excess":true},{"id":100006,"dateTime":"2020-01-31T00:00:00","description":"Еда на граничное значение","calories":100,"excess":true},{"id":100005,"dateTime":"2020-01-30T20:00:00","description":"Ужин","calories":500,"excess":false},{"id":100004,"dateTime":"2020-01-30T13:00:00","description":"Обед","calories":1000,"excess":false},{"id":100003,"dateTime":"2020-01-30T10:00:00","description":"Завтрак","calories":500,"excess":false}]
+
+<!-- get method (meal with id=100004) -->
+C:\Users\iamks>curl http://localhost:8080/topjava_war_exploded/rest/meals/100004
+{"id":100004,"dateTime":"2020-01-30T13:00:00","description":"Обед","calories":1000,"user":null}
+
+<!-- getBetween method (with empty params) -->
+C:\Users\iamks>curl http://localhost:8080/topjava_war_exploded/rest/meals/getBetween
+[{"id":100009,"dateTime":"2020-01-31T20:00:00","description":"Ужин","calories":510,"excess":true},{"id":100008,"dateTime":"2020-01-31T13:00:00","description":"Обед","calories":1000,"excess":true},{"id":100007,"dateTime":"2020-01-31T10:00:00","description":"Завтрак","calories":500,"excess":true},{"id":100006,"dateTime":"2020-01-31T00:00:00","description":"Еда на граничное значение","calories":100,"excess":true},{"id":100005,"dateTime":"2020-01-30T20:00:00","description":"Ужин","calories":500,"excess":false},{"id":100004,"dateTime":"2020-01-30T13:00:00","description":"Обед","calories":1000,"excess":false},{"id":100003,"dateTime":"2020-01-30T10:00:00","description":"Завтрак","calories":500,"excess":false}]
+
+<!-- getBetween method (with params) -->
+C:\Users\iamks>curl "http://localhost:8080/topjava_war_exploded/rest/meals/getBetween?startDate=2020-01-30&endDate=2020-01-30&startTime=&endTime="
+[{"id":100005,"dateTime":"2020-01-30T20:00:00","description":"Ужин","calories":500,"excess":false},{"id":100004,"dateTime":"2020-01-30T13:00:00","description":"Обед","calories":1000,"excess":false},{"id":100003,"dateTime":"2020-01-30T10:00:00","description":"Завтрак","calories":500,"excess":false}]
+
+<!-- delete method (meal with id=100004) -->
+C:\Users\iamks>curl -X DELETE http://localhost:8080/topjava_war_exploded/rest/meals/100004
+
+<!-- create method -->
+C:\Users\iamks>curl -H "Content-Type: application/json" -X POST http://localhost:8080/topjava_war_exploded/rest/meals -d "{\"id\":\"\", \"dateTime\":\"2023-04-15T15:00\", \"description\":\"newFood\", \"calories\":\"1000\"}"
+{"id":100014,"dateTime":"2023-04-15T15:00:00","description":"newFood","calories":1000,"user":null}
+
+<!-- update method -->
+C:\Users\iamks>curl -H "Content-Type: application/json" -X PUT http://localhost:8080/topjava_war_exploded/rest/meals/100004 -d "{\"id\":\"100004\", \"dateTime\":\"2023-04-15T16:00\", \"description\":\"updatedFood\", \"calories\":\"510\"}"
