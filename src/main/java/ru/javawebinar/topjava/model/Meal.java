@@ -66,16 +66,16 @@ public class Meal extends AbstractBaseEntity {
         return dateTime;
     }
 
-    public LocalDate getDate() {
-        return dateTime.toLocalDate();
-    }
-
     public String getDescription() {
         return description;
     }
 
     public int getCalories() {
         return calories;
+    }
+
+    public LocalDate getDate() {
+        return dateTime.toLocalDate();
     }
 
     public LocalTime getTime() {

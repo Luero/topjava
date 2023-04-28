@@ -15,12 +15,13 @@ public class MealTestData {
     public static final MatcherFactory.Matcher<Meal> MEAL_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Meal.class,
             "user");
     public static final MatcherFactory.Matcher<MealTo> MEAL_TO_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(MealTo.class,
-            "user");
+            "");
 
     public static final int NOT_FOUND = 10;
     public static final int MEAL1_ID = START_SEQ + 3;
     public static final int ADMIN_MEAL_ID = START_SEQ + 10;
     public static final String START_DATE = "2020-01-30";
+    public static final String START_DATE_LATER = "2020-01-31";
     public static final String END_DATE = "2020-01-30";
     public static final String START_TIME = "13:00";
     public static final String END_TIME = "21:00";
@@ -37,11 +38,15 @@ public class MealTestData {
 
     public static final List<Meal> meals = List.of(meal7, meal6, meal5, meal4, meal3, meal2, meal1);
 
-    public static final List<MealTo> mealsTo = MealsUtil.getTos(meals, MealsUtil.DEFAULT_CALORIES_PER_DAY);
+    public static final List<MealTo> mealsTo = MealsUtil.getTos(meals, UserTestData.user.getCaloriesPerDay());
 
-    public static List<MealTo> forGetBetweenTest = MealsUtil.getTos(List.of(meal3, meal2), MealsUtil.DEFAULT_CALORIES_PER_DAY);
+    public static List<MealTo> forGetBetweenTest = MealsUtil.getTos(List.of(meal3, meal2), UserTestData.user.getCaloriesPerDay());
 
-    public static List<MealTo> forGetBetweenWithNullsTest = MealsUtil.getTos(List.of(meal3, meal2, meal1), MealsUtil.DEFAULT_CALORIES_PER_DAY);
+    public static List<MealTo> forGetBetweenWithEmptyParamsTest = MealsUtil.getTos(List.of(meal3, meal2, meal1),
+            UserTestData.user.getCaloriesPerDay());
+
+    public static List<MealTo> forGetBetweenWithNullsTest = MealsUtil.getTos(List.of(meal7, meal6, meal5, meal4),
+            UserTestData.user.getCaloriesPerDay());
 
     public static Meal getNew() {
         return new Meal(null, of(2020, Month.FEBRUARY, 1, 18, 0), "Созданный ужин", 300);

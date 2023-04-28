@@ -7,8 +7,8 @@
 
     <bean class="ru.javawebinar.topjava.web.json.JacksonObjectMapper" id="objectMapper" factory-method="getMapper"/>
 
-    <bean id="stringToLocalTimeConverter" class="ru.javawebinar.topjava.util.StringToLocalTimeConverter"/>
-    <bean id="stringToLocalDateConverter" class="ru.javawebinar.topjava.util.StringToLocalDateConverter"/>
+    <bean id="stringToLocalTimeConverter" class="ru.javawebinar.topjava.web.StringToLocalTimeConverter"/>
+    <bean id="stringToLocalDateConverter" class="ru.javawebinar.topjava.web.StringToLocalDateConverter"/>
 
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
