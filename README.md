@@ -245,15 +245,15 @@ Java Enterprise Online Project
 -  <a href="http://bookvoed.ru/book?id=2593572">G.L. McDowell: Cracking the Coding Interview</a>
     
 ##### HW7, p.4 - curl test of MealRestController
-- Get all meals
+- Get all meals: 
     curl http://localhost:8080/topjava_war_exploded/rest/meals
-- Get meal by id
+- Get meal by id: 
     curl http://localhost:8080/topjava_war_exploded/rest/meals/{id}
-- Filter meals by date and time (params of date and time could be empty)
+- Filter meals by date and time (params of date and time could be empty): 
     curl "http://localhost:8080/topjava_war_exploded/rest/meals/getBetween?startDate={your_date}&endDate={your_date}&startTime={your_time}&endTime={your_time}"
-- Delete meal by id
+- Delete meal by id: 
     curl -X DELETE http://localhost:8080/topjava_war_exploded/rest/meals/{id}
-- Create meal
+- Create meal: 
     curl -H "Content-Type: application/json" -X POST http://localhost:8080/topjava_war_exploded/rest/meals -d "{\"id\":\"\", \"dateTime\":\"{your date and time}\", \"description\":\"{your description}\", \"calories\":\"{your calories}\"}"
-- Update meal
+- Update meal: 
     curl -H "Content-Type: application/json" -X PUT http://localhost:8080/topjava_war_exploded/rest/meals/{id} -d "{\"id\":\"{id}\", \"dateTime\":\"{your date and time}\", \"description\":\"{your description}\", \"calories\":\"{your calories}\"}"
