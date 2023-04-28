@@ -250,7 +250,7 @@ Java Enterprise Online Project
 - Get meal by id: 
     curl http://localhost:8080/topjava_war_exploded/rest/meals/{id}
 - Filter meals by date and time (params of date and time could be empty): 
-    curl "http://localhost:8080/topjava_war_exploded/rest/meals/getBetween?startDate={your_date}&endDate={your_date}&startTime={your_time}&endTime={your_time}"
+    curl "http://localhost:8080/topjava_war_exploded/rest/meals/between?startDate={your_date}&endDate={your_date}&startTime={your_time}&endTime={your_time}"
 - Delete meal by id: 
     curl -X DELETE http://localhost:8080/topjava_war_exploded/rest/meals/{id}
 - Create meal: 
