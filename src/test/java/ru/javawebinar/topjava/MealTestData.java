@@ -20,9 +20,8 @@ public class MealTestData {
     public static final int NOT_FOUND = 10;
     public static final int MEAL1_ID = START_SEQ + 3;
     public static final int ADMIN_MEAL_ID = START_SEQ + 10;
-    public static final String START_DATE = "2020-01-30";
-    public static final String START_DATE_LATER = "2020-01-31";
-    public static final String END_DATE = "2020-01-30";
+    public static final String START_DATE = "2020-01-31";
+    public static final String END_DATE = "2020-01-31";
     public static final String START_TIME = "13:00";
     public static final String END_TIME = "21:00";
 
@@ -40,12 +39,9 @@ public class MealTestData {
 
     public static final List<MealTo> mealsTo = MealsUtil.getTos(meals, UserTestData.user.getCaloriesPerDay());
 
-    public static List<MealTo> forGetBetweenTest = MealsUtil.getTos(List.of(meal3, meal2), UserTestData.user.getCaloriesPerDay());
+    public static List<MealTo> forGetBetweenTest = List.of(mealsTo.get(0), mealsTo.get(1));
 
-    public static List<MealTo> forGetBetweenWithEmptyParamsTest = MealsUtil.getTos(List.of(meal3, meal2, meal1),
-            UserTestData.user.getCaloriesPerDay());
-
-    public static List<MealTo> forGetBetweenWithNullsTest = MealsUtil.getTos(List.of(meal7, meal6, meal5, meal4),
+    public static List<MealTo> forGetBetweenWithEmptyAndNullsTest = MealsUtil.getTos(List.of(meal7, meal6, meal5, meal4),
             UserTestData.user.getCaloriesPerDay());
 
     public static Meal getNew() {

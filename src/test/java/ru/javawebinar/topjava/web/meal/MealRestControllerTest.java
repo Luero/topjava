@@ -89,15 +89,15 @@ public class MealRestControllerTest extends AbstractControllerTest {
                 "&endDate=" + END_DATE + "&startTime=&endTime="))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MEAL_TO_MATCHER.contentJson(forGetBetweenWithEmptyParamsTest));
+                .andExpect(MEAL_TO_MATCHER.contentJson(forGetBetweenWithEmptyAndNullsTest));
     }
 
     @Test
     void getBetweenWithNulls() throws Exception {
-        perform(MockMvcRequestBuilders.get(MEAL_REST_URL + "/between?startDate=" + START_DATE_LATER +
+        perform(MockMvcRequestBuilders.get(MEAL_REST_URL + "/between?startDate=" + START_DATE +
                 "&endDate="))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MEAL_TO_MATCHER.contentJson(forGetBetweenWithNullsTest));
+                .andExpect(MEAL_TO_MATCHER.contentJson(forGetBetweenWithEmptyAndNullsTest));
     }
 }
