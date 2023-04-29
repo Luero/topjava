@@ -48,7 +48,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getWithMealsTest() throws Exception {
+    void getWithMeals() throws Exception {
         assumeTrue(isDataJpa());
         perform(MockMvcRequestBuilders.get(REST_URL + "/with-meals"))
                 .andExpect(status().isOk())
