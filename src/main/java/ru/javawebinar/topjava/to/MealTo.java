@@ -59,13 +59,24 @@ public class MealTo {
                 '}';
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MealTo mealTo = (MealTo) o;
-        return calories == mealTo.calories && excess == mealTo.excess && id.equals(mealTo.id)
-                && Objects.equals(dateTime, mealTo.dateTime) && Objects.equals(description, mealTo.description);
+        return equals(this.getCalories(), mealTo.getCalories()) &&
+                equals(this.getDescription(), mealTo.getDescription()) &&
+                equals(this.excess, mealTo.excess) &&
+                equals(this.getId(), mealTo.getId()) &&
+                equals(this.getDateTime(), mealTo.getDateTime());
+    }
+
+    private boolean equals(Object control, Object test) {
+        if(null == control) {
+            return null == test;
+        }
+        return control.equals(test);
     }
 
     @Override
