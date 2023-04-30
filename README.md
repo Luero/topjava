@@ -249,11 +249,16 @@ Java Enterprise Online Project
     curl http://localhost:8080/topjava_war_exploded/rest/meals
 - Get meal by id: 
     curl http://localhost:8080/topjava_war_exploded/rest/meals/{id}
+    (example: curl http://localhost:8080/topjava_war_exploded/rest/meals/100004)
 - Filter meals by date and time (params of date and time could be empty): 
     curl "http://localhost:8080/topjava_war_exploded/rest/meals/between?startDate={your_date}&endDate={your_date}&startTime={your_time}&endTime={your_time}"
+    (example: curl "http://localhost:8080/topjava_war_exploded/rest/meals/getBetween?startDate=2020-01-30&endDate=2020-01-30&startTime=20:00&endTime=")
 - Delete meal by id: 
     curl -X DELETE http://localhost:8080/topjava_war_exploded/rest/meals/{id}
+    (example: curl -X DELETE http://localhost:8080/topjava_war_exploded/rest/meals/100004)
 - Create meal: 
     curl -H "Content-Type: application/json" -X POST http://localhost:8080/topjava_war_exploded/rest/meals -d "{\"id\":\"\", \"dateTime\":\"{your date and time}\", \"description\":\"{your description}\", \"calories\":\"{your calories}\"}"
+    (example: curl -H "Content-Type: application/json" -X POST http://localhost:8080/topjava_war_exploded/rest/meals -d "{\"id\":\"\", \"dateTime\":\"2023-04-15T15:00\", \"description\":\"newFood\", \"calories\":\"1000\"}")
 - Update meal: 
     curl -H "Content-Type: application/json" -X PUT http://localhost:8080/topjava_war_exploded/rest/meals/{id} -d "{\"id\":\"{id}\", \"dateTime\":\"{your date and time}\", \"description\":\"{your description}\", \"calories\":\"{your calories}\"}"
+    (example: curl -H "Content-Type: application/json" -X PUT http://localhost:8080/topjava_war_exploded/rest/meals/100004 -d "{\"id\":\"100004\", \"dateTime\":\"2023-04-15T16:00\", \"description\":\"updatedFood\", \"calories\":\"510\"}")
