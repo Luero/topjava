@@ -1,4 +1,4 @@
-package ru.javawebinar.topjava.web.conversters;
+package ru.javawebinar.topjava.web.converters;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.Nullable;
