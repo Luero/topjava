@@ -17,8 +17,6 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.javawebinar.topjava.MealTestData.MEAL_MATCHER;
-import static ru.javawebinar.topjava.MealTestData.meals;
 import static ru.javawebinar.topjava.UserTestData.*;
 
 class AdminRestControllerTest extends AbstractControllerTest {
