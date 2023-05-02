@@ -1,4 +1,4 @@
-const mealsAjaxUrl = "meals/";
+const mealsAjaxUrl = "profiles/meals/";
 
 // https://stackoverflow.com/a/5064235/548473
 const ctx = {
