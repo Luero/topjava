@@ -96,12 +96,9 @@ class AdminRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getEnabled() throws Exception {
-        User getEnabled = UserTestData.getEnabled();
-        perform(MockMvcRequestBuilders.put(REST_URL + GUEST_ID)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(getEnabled)))
+    void changeEnabled() throws Exception {
+        perform(MockMvcRequestBuilders.patch(REST_URL + GUEST_ID + "&enabled=false"))
                 .andExpect(status().isNoContent());
-        USER_MATCHER.assertMatch(userService.get(GUEST_ID), getEnabled);
+        USER_MATCHER.assertMatch(userService.get(GUEST_ID), UserTestData.getEnabled());
     }
 }

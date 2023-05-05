@@ -88,8 +88,9 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void getEnabled() {
-        service.getEnabled(guest.getId());
+    void changeEnabled() {
+        User toBeEnabled = new User(guest);
+        service.changeEnabled(toBeEnabled.getId(), false);
         USER_MATCHER.assertMatch(service.get(GUEST_ID), UserTestData.getEnabled());
     }
 }

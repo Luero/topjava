@@ -34,9 +34,9 @@ public class AdminUIController extends AbstractUserController {
     }
 
     @Override
-    @PostMapping("/{id}")
+    @PatchMapping("/{id}&enabled={enabled}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void getEnabled(@PathVariable int id) {
-        super.getEnabled(id);
+    public void changeEnabled(@PathVariable int id, @PathVariable boolean enabled) {
+        super.changeEnabled(id, enabled);
     }
 }

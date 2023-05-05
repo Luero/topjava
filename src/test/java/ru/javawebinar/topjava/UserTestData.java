@@ -51,8 +51,8 @@ public class UserTestData {
     }
 
     public static User getEnabled() {
-        User enabled = new User(guest);
-        enabled.setEnabled(false);
-        return enabled;
+        User toBeEnabled = new User(guest);
+        toBeEnabled.setEnabled(false);
+        return toBeEnabled;
     }
 }
