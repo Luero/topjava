@@ -61,8 +61,11 @@ function resetFilter() {
     });
 }
 
-function clearAndUpdateTable(data) {
-    ctx.datatableApi.clear().rows.add(data).draw();
+function updateTable() {
+    $.get(ctx.ajaxUrl + filter, function (data) {
+        clearAndUpdateTable(data);
+    });
 }
+
 
 
