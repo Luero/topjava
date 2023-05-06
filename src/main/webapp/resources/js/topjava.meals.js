@@ -53,12 +53,7 @@ function getFilter() {
 
 function resetFilter() {
     filter="";
-    $.ajax({
-        url: ctx.ajaxUrl + filter,
-        type: "GET"
-    }).done(function (data) {
-        clearAndUpdateTable(data);
-    });
+    updateTable();
 }
 
 function updateTable() {
