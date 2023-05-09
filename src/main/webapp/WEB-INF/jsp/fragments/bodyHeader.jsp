@@ -12,3 +12,7 @@
         </form>
     </div>
 </nav>
+
+<link rel="stylesheet" type="text/css" href="/jquery.datetimepicker.css"/>
+<script src="/jquery.js"></script>
+<script src="/build/jquery.datetimepicker.full.min.js"></script>
