@@ -70,6 +70,7 @@
                 </button>
                 <button type="button" class="btn btn-primary" onclick="save()">
                     <span class="fa fa-check"></span>
+                    <spring:message code="common.save"/>
                 </button>
             </div>
         </div>
@@ -77,11 +78,6 @@
 </div>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
-<%--<script type="text/javascript">--%>
-<%--    const i18n = [];--%>
-<%--    i18n["addTitle"] = '<spring:message code="user.add"/>';--%>
-<%--    i18n["editTitle"] = '<spring:message code="user.edit"/>';--%>
-<%--</script>--%>
 <jsp:include page="fragments/i18n.jsp">
     <jsp:param name="add" value="user.add"/>
     <jsp:param name="edit" value="user.edit"/>
