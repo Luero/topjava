@@ -16,44 +16,53 @@ function clearFilter() {
     $.get(mealAjaxUrl, updateTableByData);
 }
 $(function () {
-    makeEditable({
-        "columns": [
-            {
-                "data": "dateTime",
-                "render": function (date, type, row) {
-                    if (type === 'display') {
-                        return formatDate(date);
+    makeEditable(
+        $("#datatable").DataTable({
+            "ajax": {
+                "url": mealAjaxUrl,
+                "dataSrc": ""
+            },
+            "paging": false,
+            "info": true,
+            "columns": [
+                {
+                    "data": "dateTime",
+                    "render": function (data, type, row) {
+                        if (type === "display") {
+                            return formatDate(data)
+                        }
+                        return data;
                     }
-                    return date;
+                },
+                {
+                    "data": "description"
+                },
+                {
+                    "data": "calories"
+                },
+                {
+                    "defaultContent": "Edit",
+                    "orderable": false,
+                    "render": renderEditBtn
+                },
+                {
+                    "defaultContent": "Delete",
+                    "orderable": false,
+                    "render": renderDeleteBtn
                 }
-            },
-            {
-                "data": "description"
-            },
-            {
-                "data": "calories"
-            },
-            {
-                "render": renderEditBtn,
-                "defaultContent": "",
-                "orderable": false
-            },
-            {
-                "render": renderDeleteBtn,
-                "defaultContent": "",
-                "orderable": false
+            ],
+            "order": [
+                [
+                    0,
+                    "desc"
+                ]
+            ],
+            "createdRow": function (row, data, dataIndex) {
+                $(row).attr("data-meal-excess", data.excess);
             }
-        ],
-        "order": [
-            [
-                0,
-                "desc"
-            ]
-        ],
-        "createdRow": function (row, data, dataIndex) {
-            $(row).attr("data-meal-excess", data.excess);
-        }
-    });
+        })
+    );
+});
 
 //  http://xdsoft.net/jqplugins/datetimepicker/
     var startDate = $('#startDate');
@@ -103,4 +112,3 @@ $(function () {
     $('#dateTime').datetimepicker({
         format: 'Y-m-d H:i'
     });
-});
