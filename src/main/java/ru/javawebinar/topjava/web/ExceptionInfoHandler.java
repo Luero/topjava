@@ -80,6 +80,10 @@ public class ExceptionInfoHandler {
         {
             return new ErrorInfo(req.getRequestURL(), errorType, "User with this email already exists");
         }
+        if (rootCause.getMessage().contains("meal_unique_user_datetime_idx"))
+        {
+            return new ErrorInfo(req.getRequestURL(), errorType, "Meal with this date and time already exists");
+        }
         return new ErrorInfo(req.getRequestURL(), errorType, rootCause.toString());
     }
 }

@@ -44,6 +44,10 @@ public class UserTestData {
         return new User(null, "n", " ", "fdf", 8, false, new Date(), Collections.singleton(Role.USER));
     }
 
+    public static User getNewWithExistingEmail() {
+        return new User(null, "New", "user@yandex.ru", "newPass", 1555, false, new Date(), Collections.singleton(Role.USER));
+    }
+
     public static User getUpdated() {
         User updated = new User(user);
         updated.setEmail("update@gmail.com");
