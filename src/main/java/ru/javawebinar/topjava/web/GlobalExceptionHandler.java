@@ -21,6 +21,12 @@ public class GlobalExceptionHandler {
         log.error("Exception at request " + req.getRequestURL(), e);
         Throwable rootCause = ValidationUtil.getRootCause(e);
 
+        if (rootCause.getMessage().contains("users_unique_email_idx"))
+        {
+            return new ModelAndView("exception",
+                    Map.of("exception", rootCause, "message", "User with this email already exists"));
+        }
+
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         ModelAndView mav = new ModelAndView("exception",
                 Map.of("exception", rootCause, "message", rootCause.toString(), "status", httpStatus));
