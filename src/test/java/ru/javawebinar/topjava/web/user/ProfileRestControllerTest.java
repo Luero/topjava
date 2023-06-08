@@ -16,6 +16,8 @@ import ru.javawebinar.topjava.util.UsersUtil;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
+import java.util.Locale;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -112,6 +114,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 .andReturn();
 
         String content = result.getResponse().getContentAsString();
-        Assertions.assertTrue(content.contains("User with this email already exists"));
+        Assertions.assertTrue(content.contains(messageSource.getMessage("user.doubleEmail", null,
+                Locale.getDefault())));
     }
 }

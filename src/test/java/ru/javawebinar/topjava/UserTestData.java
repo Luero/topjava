@@ -59,6 +59,15 @@ public class UserTestData {
         return updated;
     }
 
+    public static User getUpdatedWithInvalidData() {
+        User updated = new User(user);
+        updated.setEmail(" ");
+        updated.setName("n");
+        updated.setCaloriesPerDay(8);
+        updated.setPassword("dss");
+        return updated;
+    }
+
     public static String jsonWithPassword(User user, String passw) {
         return JsonUtil.writeAdditionProps(user, "password", passw);
     }

@@ -14,6 +14,8 @@ import ru.javawebinar.topjava.service.UserService;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 
+import java.util.Locale;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -158,6 +160,16 @@ class AdminRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void updateWithInvalidData() throws Exception {
+        User updated = getUpdatedWithInvalidData();
+        perform(MockMvcRequestBuilders.put(REST_URL + USER_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(admin))
+                .content(jsonWithPassword(updated, updated.getPassword())))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
     @Transactional(propagation = Propagation.NEVER)
     void createWithExistingEmail() throws Exception {
         User newUser = getNewWithExistingEmail();
@@ -169,6 +181,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .andReturn();
 
         String content = result.getResponse().getContentAsString();
-        Assertions.assertTrue(content.contains("User with this email already exists"));
+        Assertions.assertTrue(content.contains(messageSource.getMessage("user.doubleEmail", null,
+                Locale.getDefault())));
     }
 }

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.transaction.TestTransaction;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -16,6 +15,8 @@ import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
+
+import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -141,6 +142,15 @@ class MealRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void updateWithInvalidData() throws Exception {
+        Meal updated = getUpdatedWithInvalidData();
+        perform(MockMvcRequestBuilders.put(REST_URL + MEAL1_ID).contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(user))
+                .content(JsonUtil.writeValue(updated)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
     @Transactional(propagation = Propagation.NEVER)
     void createWithExistingDateTime() throws Exception {
         Meal newMeal = getNewMealWithExistingDate();
@@ -152,6 +162,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andReturn();
 
         String content = result.getResponse().getContentAsString();
-        Assertions.assertTrue(content.contains("Meal with this date and time already exists"));
+        Assertions.assertTrue(content.contains(messageSource.getMessage("meal.doubleDateTime", null,
+                Locale.getDefault())));
     }
 }
