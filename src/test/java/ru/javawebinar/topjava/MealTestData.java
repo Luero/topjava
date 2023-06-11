@@ -47,6 +47,6 @@ public class MealTestData {
     }
 
     public static Meal getUpdatedWithInvalidData() {
-        return new Meal(MEAL1_ID, meal1.getDateTime(), "f", 3);
+        return new Meal(MEAL1_ID, of(2020, Month.FEBRUARY, 2, 10, 0), "f", 3);
     }
 }

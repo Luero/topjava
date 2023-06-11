@@ -108,9 +108,13 @@ function renderDeleteBtn(data, type, row) {
 function failNoty(jqXHR) {
     closeNoty();
     var errorInfo = jqXHR.responseJSON;
+    var message = "";
+    for(let i = 0; i < errorInfo.detail.length; i++) {
+        message += errorInfo.detail[i] + "<br>";
+    }
     failedNote = new Noty({
         text: "<span class='fa fa-lg fa-exclamation-circle'></span> &nbsp;" + i18n["common.errorStatus"] + ": " + jqXHR.status +
-            "<br>" + errorInfo.type + "<br>" + errorInfo.detail,
+            "<br>" + errorInfo.type + "<br>" + message,
         type: "error",
         layout: "bottomRight"
     });

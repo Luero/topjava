@@ -24,10 +24,7 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import static ru.javawebinar.topjava.util.exception.ErrorType.*;
 
@@ -50,12 +47,11 @@ public class ExceptionInfoHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
         Throwable rootCause = ValidationUtil.getRootCause(e);
-        if (rootCause.getMessage().contains("users_unique_email_idx") || rootCause.getMessage().contains("USERS_UNIQUE_EMAIL_IDX")) {
+        if (rootCause.getMessage().contains("users_unique_email_idx".toLowerCase())) {
             return logAndGetErrorInfo(req, e, false, DATA_ERROR, messageSource.getMessage("user.doubleEmail", null,
                     Locale.getDefault()));
         }
-        if (rootCause.getMessage().contains("meal_unique_user_datetime_idx")
-                || rootCause.getMessage().contains("MEAL_UNIQUE_USER_DATETIME_IDX")) {
+        if (rootCause.getMessage().contains("meal_unique_user_datetime_idx".toLowerCase())) {
             return logAndGetErrorInfo(req, e, false, DATA_ERROR, messageSource.getMessage("meal.doubleDateTime", null,
                     Locale.getDefault()));
         }
@@ -88,19 +84,14 @@ public class ExceptionInfoHandler {
     private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException,
                                                 ErrorType errorType, String... details) {
         Throwable rootCause = ValidationUtil.getRootCause(e);
-        if (e instanceof BindException && !logException) {
-            for (String detail : details) {
-                log.warn(req.getRequestURL() + detail, errorType);
-                return new ErrorInfo(req.getRequestURL(), errorType, detail);
-            }
-        } else if (e instanceof DataIntegrityViolationException && !logException) {
+        if (details.length != 0) {
             log.warn(Arrays.toString(details), req.getRequestURL(), errorType);
-            return new ErrorInfo(req.getRequestURL(), errorType, Arrays.toString(details));
+            return new ErrorInfo(req.getRequestURL(), errorType, List.of(details));
         } else if (logException) {
             log.error(errorType + " at request " + req.getRequestURL(), rootCause);
         } else {
             log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
         }
-        return new ErrorInfo(req.getRequestURL(), errorType, rootCause.getLocalizedMessage());
+        return new ErrorInfo(req.getRequestURL(), errorType, List.of(rootCause.getLocalizedMessage()));
     }
 }
