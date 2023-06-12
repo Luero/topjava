@@ -33,10 +33,16 @@ public class ProfileUIController extends AbstractUserController {
         if (result.hasErrors()) {
             return "profile";
         } else {
-            super.update(userTo, SecurityUtil.authUserId());
-            SecurityUtil.get().setTo(userTo);
-            status.setComplete();
-            return "redirect:/meals";
+            try {
+                super.update(userTo, SecurityUtil.authUserId());
+                SecurityUtil.get().setTo(userTo);
+                status.setComplete();
+                return "redirect:/meals";
+            } catch (DataIntegrityViolationException e) {
+                result.rejectValue("email", "repeating email", messageSource.getMessage("user.doubleEmail", null,
+                        Locale.getDefault()));
+                return "profile";
+            }
         }
     }
 
