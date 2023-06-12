@@ -47,12 +47,11 @@ public class ExceptionInfoHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
         Throwable rootCause = ValidationUtil.getRootCause(e);
-        if (rootCause.getMessage().contains("users_unique_email_idx") || rootCause.getMessage().contains("USERS_UNIQUE_EMAIL_IDX")) {
+        if (rootCause.getMessage().toLowerCase().contains("users_unique_email_idx")) {
             return logAndGetErrorInfo(req, e, false, DATA_ERROR, messageSource.getMessage("user.doubleEmail", null,
                     Locale.getDefault()));
         }
-        if (rootCause.getMessage().contains("meal_unique_user_datetime_idx")
-                || rootCause.getMessage().contains("MEAL_UNIQUE_USER_DATETIME_IDX")) {
+        if (rootCause.getMessage().toLowerCase().contains("meal_unique_user_datetime_idx")) {
             return logAndGetErrorInfo(req, e, false, DATA_ERROR, messageSource.getMessage("meal.doubleDateTime", null,
                     Locale.getDefault()));
         }
